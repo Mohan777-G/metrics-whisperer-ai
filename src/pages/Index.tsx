@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,6 +24,11 @@ const Index = () => {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
+  // Fix environment variable access for browser
+  const getApiUrl = () => {
+    return import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  };
+
   const exampleQueries = [
     "What's the average CPU usage?",
     "Show me the request rate",
@@ -43,7 +47,7 @@ const Index = () => {
     setResponse(null);
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+      const apiUrl = getApiUrl();
       const res = await fetch(`${apiUrl}/query`, {
         method: 'POST',
         headers: {
